@@ -3,7 +3,7 @@ class Baloons {
    * @param {Map<int, Map<int, int>>} locations
    * @param {Array<int>} dimensions
    */
-  constructor(locations, dimensions) {
+  constructor({ locations, dimensions }) {
     // TODO: Check that the Map is of the correct type
     console.assert(locations instanceof Map, 'Locations must be a Map');
     console.assert(dimensions.length === 2, 'Dimensions must be an array of length 2');
@@ -13,6 +13,9 @@ class Baloons {
     this.dimensions = dimensions;
     this.maxPop = this.#calculateMaxPop();
   }
+
+
+
   /**
    * @param {int} x
    * @param {int} y
@@ -92,7 +95,10 @@ class Baloons {
     )
     );
 
-    return new Baloons(newLocations, this.dimensions);
+    return new Baloons({
+      locations: newLocations,
+      dimensions: this.dimensions
+    });
   }
 
   /**
@@ -101,8 +107,79 @@ class Baloons {
    * @param {int} y
    * @returns {boolean}
    */
-  isBaloonExists(x, y) {
+  isBalloonExists(x, y) {
     return this.locations.get(x) && this.locations.get(x).get(y);
+  }
+
+  toObject() {
+    return {
+      locations: Object.fromEntries(
+        [...this.locations].map(([key, value]) => [
+          key,
+          Object.fromEntries([...value])
+        ]
+        )
+      ),
+      dimensions: this.dimensions
+    };
+
+  }
+
+  toBase64() {
+    const obj = this.toObject();
+    const json = JSON.stringify(obj);
+    console.log('hyoungphi - json', json);
+
+    return Buffer.from(json).toString('base64');
+  }
+
+  static fromBase64(base64) {
+    const json = Buffer.from(base64, 'base64').toString('utf8');
+    const obj = JSON.parse(json);
+
+    const locations = new Map(
+      Object.entries(obj.locations).map(([key, value]) => [
+        parseInt(key),
+        new Map(Object.entries(value).map(([key, value]) => [parseInt(key), value]))
+      ])
+    );
+    const dimensions = obj.dimensions;
+
+    console.log('hyoungphi - locations', locations);
+
+    return new Baloons({ locations, dimensions });
+  }
+
+  isEqual(baloons) {
+    if (!(baloons instanceof Baloons)) {
+      return false;
+    }
+    if (this.dimensions.length !== baloons.dimensions.length) {
+      return false;
+    }
+    if (this.dimensions[0] !== baloons.dimensions[0]) {
+      return false;
+    }
+    if (this.dimensions[1] !== baloons.dimensions[1]) {
+      return false;
+    }
+    if (this.locations.size !== baloons.locations.size) {
+      return false;
+    }
+    for (let [key, value] of this.locations) {
+      if (!baloons.locations.has(key)) {
+        return false;
+      }
+      if (value.size !== baloons.locations.get(key).size) {
+        return false;
+      }
+      for (let [k, v] of value) {
+        if (!baloons.locations.get(key).has(k)) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }
 
