@@ -6,3 +6,5 @@ To make this files work, fix some css files :
 
 `:root {` to `body {` and `body.dark {`
 for each `thems.light.css` and `thems.dark.css`
+
+at `theme.css`, remove `(prefers-color-scheme: light)` and `(prefers-color-scheme: dark)`
