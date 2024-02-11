@@ -128,26 +128,29 @@ class Baloons {
   toBase64() {
     const obj = this.#toObject();
     const json = JSON.stringify(obj);
-    console.log('hyoungphi - json', json);
 
     return Buffer.from(json).toString('base64');
   }
 
   static fromBase64(base64) {
     const json = Buffer.from(base64, 'base64').toString('utf8');
-    const obj = JSON.parse(json);
+    let obj;
+    try {
+      obj = JSON.parse(json);
+      const locations = new Map(
+        Object.entries(obj.locations).map(([key, value]) => [
+          parseInt(key),
+          new Map(Object.entries(value).map(([key, value]) => [parseInt(key), value]))
+        ])
+      );
+      const dimensions = obj.dimensions;
 
-    const locations = new Map(
-      Object.entries(obj.locations).map(([key, value]) => [
-        parseInt(key),
-        new Map(Object.entries(value).map(([key, value]) => [parseInt(key), value]))
-      ])
-    );
-    const dimensions = obj.dimensions;
+      return new Baloons({ locations, dimensions });
+    }
+    catch (e) {
+      return null;
+    }
 
-    console.log('hyoungphi - locations', locations);
-
-    return new Baloons({ locations, dimensions });
   }
 
   isEqual(baloons) {
