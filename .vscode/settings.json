@@ -4,4 +4,5 @@
     "prettier.printWidth": 80,
     "editor.formatOnSave": true,
     "prettier.jsxSingleQuote": true,
+    "editor.tabSize": 2,
 }
