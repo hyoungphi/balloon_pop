@@ -111,7 +111,7 @@ class Baloons {
     return this.locations.get(x) && this.locations.get(x).get(y);
   }
 
-  toObject() {
+  #toObject() {
     return {
       locations: Object.fromEntries(
         [...this.locations].map(([key, value]) => [
@@ -126,7 +126,7 @@ class Baloons {
   }
 
   toBase64() {
-    const obj = this.toObject();
+    const obj = this.#toObject();
     const json = JSON.stringify(obj);
     console.log('hyoungphi - json', json);
 
