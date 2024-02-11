@@ -56,7 +56,6 @@ class Baloons {
             for (let [y, _] of row.entries()) {
                 let pop = this.#calculatePop(x, y);
                 maxPop = Math.max(maxPop, pop);
-                console.log('hyoungphi', x, y, pop, maxPop);
                 if (maxPop === 5) return maxPop;
             }
         }
