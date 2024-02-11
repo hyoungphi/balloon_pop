@@ -5,4 +5,9 @@
     "editor.formatOnSave": true,
     "prettier.jsxSingleQuote": true,
     "editor.tabSize": 2,
+    "javascript.format.semicolons": "insert",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "prettier.bracketSameLine": false,
+    "prettier.singleAttributePerLine": true,
 }

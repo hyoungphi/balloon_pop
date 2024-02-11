@@ -1,9 +1,11 @@
 body {
+  --background-color: #d3d7e0;
   --primary-color: #004fed;
   --secondary-color: #282c34;
 }
 
 body.dark {
+  --background-color: #282c34;
   --primary-color: #282c34;
   --secondary-color: #004fed;
 }
