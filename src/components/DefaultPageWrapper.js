@@ -4,7 +4,7 @@ import './DefaultPageWrapper.css';
 
 function DefaultPageWrapper({ children }) {
   return (
-    <div className='DefaultPageWrapper'>
+    <div className='DefaultPageWrapper background'>
       <Header />
       <div className='Content'>{children}</div>
       <Footer />

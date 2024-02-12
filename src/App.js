@@ -2,27 +2,31 @@ import logo from 'logo.svg';
 import 'App.css';
 import ColorSchemeSwitch from 'components/ColorSchemeSwitch';
 import StartPage from 'pages/StartPage';
+import GamePage from 'pages/GamePage';
+
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from 'react-router-dom';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <StartPage />,
+  },
+  {
+    path: "/game/:data",
+    element: <GamePage />,
+    action: (params) => {
+      console.log('hyoungphi - game action', params);
+      alert('hyoungphi - game action', params.data);
+    }
+  },
+]);
 
 function App() {
   return (
-    <div className="App">
-      {/* <header className="App-header">
-        <ColorSchemeSwitch />
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
-      <StartPage />
-    </div>
+    <RouterProvider router={router} />
   );
 }
 

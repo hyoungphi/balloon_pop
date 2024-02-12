@@ -1,6 +1,6 @@
 function Header() {
   return (
-    <div className='Header'>
+    <div className='Header outline on-surface-text'>
       <h1>Header</h1>
     </div>
   );

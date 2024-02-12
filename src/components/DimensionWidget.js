@@ -1,33 +1,30 @@
 import { useState } from "react";
+import Dimensions from "utils/Dimensions";
 
 function DimensionWidget(props) {
-  const { dimension, onChange } = props;
-  console.assert(dimension.length === 2, 'Dimension must be an array of length 2');
-  console.assert(typeof dimension[0] === 'number', 'First dimension must be a number');
-  console.assert(typeof dimension[1] === 'number', 'Second dimension must be a number');
-  console.assert(dimension[0] > 0, 'First dimension must be greater than 0');
-  console.assert(dimension[1] > 0, 'Second dimension must be greater than 0');
+  const { dimensions, onChange } = props;
+  console.assert(dimensions instanceof Dimensions, 'dimensions must be a Dimensions');
   console.assert(typeof onChange === 'function', 'onChange must be a function');
 
-  const [d, setD] = useState(dimension);
+  const [d, setD] = useState(dimensions);
   return (
     <div>
       <input
         type="number"
-        value={d[0]}
+        value={d.rows}
         onChange={(e) => {
-          setD([e.target.value, d[1]]);
-          onChange([e.target.value, d[1]]);
+          setD(new Dimensions({ rows: e.target.value, columns: d.columns }));
+          onChange(new Dimensions({ rows: e.target.value, columns: d.columns }));
         }}
       />
       x
       <input
         type="number"
-        value={d[1]}
+        value={d.columns}
 
         onChange={(e) => {
-          setD([d[0], e.target.value]);
-          onChange([d[0], e.target.value]);
+          setD(new Dimensions({ rows: d.rows, columns: e.target.value }));
+          onChange(new Dimensions({ rows: d.rows, columns: e.target.value }));
 
 
         }}
