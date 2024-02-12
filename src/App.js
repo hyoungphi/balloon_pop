@@ -19,13 +19,8 @@ const router = createBrowserRouter([
     path: "*",
     element: <GamePage />,
     loader: ({ request, params }) => {
-
-      console.log('loader');
-      console.log('requeswt: ', request, ' params: ', params);
-      console.log(params['*']);
       const balloon = Balloons.fromBase64(params['*']);
       if (balloon === null || !balloon instanceof Balloons) {
-        console.log('redirect!');
         return redirect('/');
       }
       return true;
