@@ -1,5 +1,5 @@
 import Balloons from './Balloons';
-import Dimensions from 'utils/Dimensions';
+import Dimensions from 'models/Dimensions';
 
 test('constructor', () => {
   const dimensions = new Dimensions({ rows: 10, columns: 10 });
@@ -37,13 +37,30 @@ test('doPop', () => {
     [8, new Map([[0, 1], [1, 1]])],
     [9, new Map([[0, 1], [1, 1]])],
   ]);
-  const baloons = new Balloons({
+  const balloons = new Balloons({
     locations: locations,
     dimensions: dimensions
   });
 
-  expect(baloons.doPop(0, 0)).toBe(null);
-  expect(baloons.doPop(1, 4)).toBeInstanceOf(Balloons);
+  expect(balloons.doPop(0, 0)).toBe(null);
+  const popedBallons = balloons.doPop(1, 4);
+  const expectPopedLocations = new Map([
+    [0, new Map([[0, 1], [1, 1], [9, 1]])],
+    [1, new Map([[0, 1], [2, 1], [6, 1], [7, 1], [8, 1], [9, 1]])],
+    [2, new Map([[0, 1], [1, 1], [9, 1]])],
+    [3, new Map([[0, 1], [1, 1]])],
+    [4, new Map([[0, 1], [1, 1]])],
+    [5, new Map([[0, 1], [1, 1]])],
+    [6, new Map([[0, 1], [1, 1]])],
+    [7, new Map([[0, 1], [1, 1]])],
+    [8, new Map([[0, 1], [1, 1]])],
+    [9, new Map([[0, 1], [1, 1]])],
+  ]);
+  const expextPopedBalloons = new Balloons({ locations: expectPopedLocations, dimensions: dimensions });
+  expect(popedBallons).toBeInstanceOf(Balloons);
+  console.log(popedBallons.locations);
+  expect(popedBallons.isEqual(expextPopedBalloons)).toBe(true);
+
 }
 );
 

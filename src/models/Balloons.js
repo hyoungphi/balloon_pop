@@ -1,4 +1,4 @@
-import Dimensions from 'utils/Dimensions.js';
+import Dimensions from 'models/Dimensions.js';
 
 class Balloons {
   #locations;
@@ -87,21 +87,16 @@ class Balloons {
     console.assert(y < this.#dimensions.columns, 'y must be less than the second dimension');
 
     if (!this.#checkMaxPop(x, y)) return null;
-    let newLocations = new Map([...this.#locations].filter((row, r) =>
-      [...row].filter((column, c) =>
-        !(
-          (r === x && c === y) ||
-          (r === x - 1 && c === y) ||
-          (r === x + 1 && c === y) ||
-          (r === x && c === y - 1) ||
-          (r === x && c === y + 1)
-        )
-      )
-    )
-    );
+
+    console.log('keys: ', this.#locations.entries());
+    this.#removeBalloon(x - 1, y);
+    this.#removeBalloon(x, y);
+    this.#removeBalloon(x + 1, y);
+    this.#removeBalloon(x, y - 1);
+    this.#removeBalloon(x, y + 1);
 
     return new Balloons({
-      locations: newLocations,
+      locations: this.#locations,
       dimensions: this.#dimensions
     });
   }
@@ -223,6 +218,19 @@ class Balloons {
       this.#locations.set(x, new Map([[y, 1]]));
       return true;
     }
+  }
+
+  #removeBalloon(x, y) {
+    if (this.#locations.has(x)) {
+      if (this.#locations.get(x).has(y)) {
+        this.#locations.get(x).delete(y);
+        if (this.#locations.get(x).size === 0) {
+          this.#locations.delete(x);
+        }
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
