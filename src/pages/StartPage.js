@@ -17,24 +17,22 @@ function StartPage() {
 
   return (
     <DefaultPageWrapper>
-      <div>
-        <h1 className='on-background-text'>Start Page</h1>
-        <DimensionWidget
-          dimensions={dimensions}
-          onChange={(value) => setDimensions(value)}
-        />
-        <BalloonTable
-          balloons={new Balloons({
-            locations: new Map(),
-            dimensions: dimensions
-          })}
-          dimensions={dimensions} />
-        <CommonButton
-          className='primary on-primary-text'
-          onClick={() => {
-            navigate(Balloons.random(dimensions).toBase64());
-          }}>Start Game</CommonButton>
-      </div>
+      <h1 className='on-background-text'>Start Page</h1>
+      <DimensionWidget
+        dimensions={dimensions}
+        onChange={(value) => setDimensions(value)}
+      />
+      <BalloonTable
+        balloons={new Balloons({
+          locations: new Map(),
+          dimensions: dimensions
+        })}
+      />
+      <CommonButton
+        className='primary on-primary-text'
+        onClick={() => {
+          navigate(Balloons.random(dimensions).toBase64());
+        }}>Start Game</CommonButton>
     </DefaultPageWrapper>
   );
 }

@@ -1,12 +1,11 @@
 import Balloons from "utils/Balloons";
 import BalloonCell from "./BalloonCell";
-import Dimensions from "utils/Dimensions";
 
 function BalloonTable(props) {
-  const { balloons, dimensions } = props;
+  const { balloons } = props;
+  const dimensions = balloons.dimensions;
 
   console.assert(balloons instanceof Balloons, 'Balloons must be an instance of Balloons');
-  console.assert(dimensions instanceof Dimensions, 'dimensions must be a Dimensions');
 
   return (
     <table>
