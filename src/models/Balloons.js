@@ -61,6 +61,7 @@ class Balloons {
     let maxPop = 0;
 
     for (let [x, row] of this.#locations.entries()) {
+      // eslint-disable-next-line
       for (let [y, _] of row.entries()) {
         let pop = this.#calculatePop(x, y);
         maxPop = Math.max(maxPop, pop);
@@ -200,7 +201,8 @@ class Balloons {
       if (value.size !== balloons.locations.get(key).size) {
         return false;
       }
-      for (let [k, v] of value) {
+      // eslint-disable-next-line
+      for (let [k, _] of value) {
         if (!balloons.locations.get(key).has(k)) {
           return false;
         }
@@ -252,6 +254,10 @@ class Balloons {
       }
     }
     return balloon;
+  }
+
+  isCleared() {
+    return this.#locations.size === 0;
   }
 }
 

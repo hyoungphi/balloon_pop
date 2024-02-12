@@ -3,9 +3,9 @@ import { useState } from 'react';
 import DefaultPageWrapper from 'components/DefaultPageWrapper';
 import DimensionWidget from 'components/DimensionWidget';
 import BalloonTable from 'components/BalloonTable';
-import Balloons from 'utils/Balloons';
+import Balloons from 'models/Balloons';
 import CommonButton from 'components/CommonButton';
-import Dimensions from 'utils/Dimensions';
+import Dimensions from 'models/Dimensions';
 import { useNavigate } from 'react-router-dom';
 
 const DEFAULT_DIMENSION = new Dimensions({ rows: 5, columns: 5 });

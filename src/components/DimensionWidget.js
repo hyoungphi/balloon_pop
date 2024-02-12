@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Dimensions from "utils/Dimensions";
+import Dimensions from "models/Dimensions";
 
 function DimensionWidget(props) {
   const { dimensions, onChange } = props;

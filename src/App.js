@@ -7,7 +7,7 @@ import {
   redirect,
   RouterProvider,
 } from 'react-router-dom';
-import Balloons from 'utils/Balloons';
+import Balloons from 'models/Balloons';
 
 
 const router = createBrowserRouter([
