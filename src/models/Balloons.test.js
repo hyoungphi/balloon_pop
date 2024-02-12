@@ -58,7 +58,6 @@ test('doPop', () => {
   ]);
   const expextPopedBalloons = new Balloons({ locations: expectPopedLocations, dimensions: dimensions });
   expect(popedBallons).toBeInstanceOf(Balloons);
-  console.log(popedBallons.locations);
   expect(popedBallons.isEqual(expextPopedBalloons)).toBe(true);
 
 }

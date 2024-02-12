@@ -18,7 +18,6 @@ function BalloonTable(props) {
                 <BalloonCell
                   value={balloons.isBalloonExists(i, j) ? '🎈' : ''}
                   onClick={() => {
-                    console.log('hyoungphi - onClick, BalloonTable');
                     onPop(i, j);
                   }}
                 />

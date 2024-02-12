@@ -9,7 +9,6 @@ function GamePage() {
   const [path, _] = usePath();
   const balloons = Balloons.fromBase64(path);
   const onPop = (i, j) => {
-    console.log('hyoungphi - onPop, GamePage, i, j: ', i, j);
     const nextBalloons = balloons.doPop(i, j);
     if (nextBalloons === null) {
       //TODO: Game Over

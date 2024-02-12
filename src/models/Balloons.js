@@ -89,7 +89,6 @@ class Balloons {
 
     if (!this.#checkMaxPop(x, y)) return null;
 
-    console.log('keys: ', this.#locations.entries());
     this.#removeBalloon(x - 1, y);
     this.#removeBalloon(x, y);
     this.#removeBalloon(x + 1, y);
