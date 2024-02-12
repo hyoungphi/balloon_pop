@@ -1,14 +1,14 @@
+import Dimensions from 'utils/Dimensions.js';
+
 class Balloons {
   /**
    * @param {Map<int, Map<int, int>>} locations
-   * @param {Array<int>} dimensions
+   * @param {Dimensions} dimensions
    */
   constructor({ locations, dimensions }) {
     // TODO: Check that the Map is of the correct type
-    console.assert(locations instanceof Map, 'Locations must be a Map');
-    console.assert(dimensions.length === 2, 'Dimensions must be an array of length 2');
-    console.assert(dimensions[0] > 0, 'First dimension must be greater than 0');
-    console.assert(dimensions[1] > 0, 'Second dimension must be greater than 0');
+    console.assert(locations instanceof Map, 'locations must be a Map');
+    console.assert(dimensions instanceof Dimensions, 'dimensions must be a Dimensions');
     this.locations = locations;
     this.dimensions = dimensions;
     this.maxPop = this.#calculateMaxPop();
@@ -35,8 +35,8 @@ class Balloons {
       return pop;
     }
 
-    let xs = [x - 1, x, x + 1].filter((x) => x >= 0 && x < this.dimensions[0]);
-    let ys = [y - 1, y, y + 1].filter((y) => y >= 0 && y < this.dimensions[1]);
+    let xs = [x - 1, x, x + 1].filter((x) => x >= 0 && x < this.dimensions.rows);
+    let ys = [y - 1, y, y + 1].filter((y) => y >= 0 && y < this.dimensions.columns);
     for (let i = 0; i < xs.length; i++) {
       if (this.locations.get(xs[i]) && this.locations.get(xs[i]).get(y)) {
         pop++;
@@ -77,9 +77,9 @@ class Balloons {
     console.assert(Number.isInteger(x), 'x must be an integer');
     console.assert(Number.isInteger(y), 'y must be an integer');
     console.assert(x >= 0, 'x must be greater than or equal to 0');
-    console.assert(x < this.dimensions[0], 'x must be less than the first dimension');
+    console.assert(x < this.dimensions.rows, 'x must be less than the first dimension');
     console.assert(y >= 0, 'y must be greater than or equal to 0');
-    console.assert(y < this.dimensions[1], 'y must be less than the second dimension');
+    console.assert(y < this.dimensions.columns, 'y must be less than the second dimension');
 
     if (!this.#checkMaxPop(x, y)) return null;
     let newLocations = new Map([...this.locations].filter((row, r) =>
@@ -120,7 +120,7 @@ class Balloons {
         ]
         )
       ),
-      dimensions: this.dimensions
+      dimensions: this.dimensions.toObject()
     };
 
   }
@@ -143,7 +143,7 @@ class Balloons {
           new Map(Object.entries(value).map(([key, value]) => [parseInt(key), value]))
         ])
       );
-      const dimensions = obj.dimensions;
+      const dimensions = Dimensions.fromObject(obj.dimensions);
 
       return new Balloons({ locations, dimensions });
     }
@@ -162,13 +162,10 @@ class Balloons {
     if (!(balloons instanceof Balloons)) {
       return false;
     }
-    if (this.dimensions.length !== balloons.dimensions.length) {
+    if (this.dimensions.rows !== balloons.dimensions.rows) {
       return false;
     }
-    if (this.dimensions[0] !== balloons.dimensions[0]) {
-      return false;
-    }
-    if (this.dimensions[1] !== balloons.dimensions[1]) {
+    if (this.dimensions.columns !== balloons.dimensions.columns) {
       return false;
     }
     if (this.locations.size !== balloons.locations.size) {
@@ -188,6 +185,22 @@ class Balloons {
       }
     }
     return true;
+  }
+
+  #addBalloon(x, y) {
+    if (this.locations.has(x)) {
+      if (this.locations.get(x).has(y)) return false;
+      this.locations.get(x).set(y, 1);
+      return true;
+    } else {
+      this.locations.set(x, new Map([[y, 1]]));
+      return true;
+    }
+  }
+
+  static random(dimensions) {
+    console.assert(dimensions instanceof Dimensions, 'dimensions must be Dimensions');
+
   }
 }
 

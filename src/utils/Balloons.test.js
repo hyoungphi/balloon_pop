@@ -1,7 +1,8 @@
 import Balloons from './Balloons';
+import Dimensions from 'utils/Dimensions';
 
 test('constructor', () => {
-  const dimensions = [10, 10];
+  const dimensions = new Dimensions({ rows: 10, columns: 10 });
   const locations = new Map([
     [0, new Map([[0, 1], [1, 1], [4, 1], [9, 1]])],
     [1, new Map([[0, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1]])],
@@ -23,7 +24,7 @@ test('constructor', () => {
 );
 
 test('doPop', () => {
-  const dimensions = [10, 10];
+  const dimensions = new Dimensions({ rows: 10, columns: 10 });
   const locations = new Map([
     [0, new Map([[0, 1], [1, 1], [4, 1], [9, 1]])],
     [1, new Map([[0, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1]])],
@@ -47,7 +48,7 @@ test('doPop', () => {
 );
 
 test('Base64', () => {
-  const dimensions = [10, 10];
+  const dimensions = new Dimensions({ rows: 10, columns: 10 });
   const locations = new Map([
     [0, new Map([[0, 1], [1, 1], [4, 1], [9, 1]])],
     [1, new Map([[0, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1]])],
