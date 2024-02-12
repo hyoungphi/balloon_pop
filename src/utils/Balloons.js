@@ -129,11 +129,33 @@ class Balloons {
     const obj = this.#toObject();
     const json = JSON.stringify(obj);
 
-    return Buffer.from(json).toString('base64');
+    let base64;
+    try {
+      base64 = Buffer.from(json).toString('base64'); // for testing
+    } catch (_) {
+      try {
+
+        base64 = btoa(json);
+      } catch (e) {
+        console.assert('failed to convert to base64 from string, string: ', json, ' error: ', e);
+      }
+    }
+
+    return base64;
   }
 
   static fromBase64(base64) {
-    const json = Buffer.from(base64, 'base64').toString('utf8');
+    let json;
+
+    try {
+      json = Buffer.from(base64, 'base64').toString('utf8');
+    } catch (_) {
+      try {
+        json = atob(base64);
+      } catch (e) {
+        console.assert('failed to convert to string from base64, base64: ', base64, ' error: ', e);
+      }
+    }
     let obj;
     try {
       obj = JSON.parse(json);
@@ -187,7 +209,7 @@ class Balloons {
     return true;
   }
 
-  #addBalloon(x, y) {
+  addBalloon(x, y) {
     if (this.locations.has(x)) {
       if (this.locations.get(x).has(y)) return false;
       this.locations.get(x).set(y, 1);
@@ -198,9 +220,25 @@ class Balloons {
     }
   }
 
+  /**
+   * 
+   * @param {Dimensions} dimensions 
+   */
   static random(dimensions) {
     console.assert(dimensions instanceof Dimensions, 'dimensions must be Dimensions');
 
+    let balloon = new Balloons({ locations: new Map(), dimensions: dimensions });
+
+    // to fix random
+    for (let i = 0; i < dimensions.rows; i++) {
+      for (let j = 0; j < dimensions.columns; j++) {
+        let r = Math.random();
+        if (r > 0.5) {
+          balloon.addBalloon(i, j);
+        }
+      }
+    }
+    return balloon;
   }
 }
 

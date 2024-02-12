@@ -1,13 +1,14 @@
-import logo from 'logo.svg';
 import 'App.css';
-import ColorSchemeSwitch from 'components/ColorSchemeSwitch';
 import StartPage from 'pages/StartPage';
 import GamePage from 'pages/GamePage';
 
 import {
   createBrowserRouter,
+  redirect,
   RouterProvider,
 } from 'react-router-dom';
+import Balloons from 'utils/Balloons';
+
 
 const router = createBrowserRouter([
   {
@@ -15,12 +16,20 @@ const router = createBrowserRouter([
     element: <StartPage />,
   },
   {
-    path: "/game/:data",
+    path: "*",
     element: <GamePage />,
-    action: (params) => {
-      console.log('hyoungphi - game action', params);
-      alert('hyoungphi - game action', params.data);
-    }
+    loader: ({ request, params }) => {
+
+      console.log('loader');
+      console.log('requeswt: ', request, ' params: ', params);
+      console.log(params['*']);
+      const balloon = Balloons.fromBase64(params['*']);
+      if (balloon === null || !balloon instanceof Balloons) {
+        console.log('redirect!');
+        return redirect('/');
+      }
+      return true;
+    },
   },
 ]);
 

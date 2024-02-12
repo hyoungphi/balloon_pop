@@ -10,8 +10,6 @@ class Dimensions {
    * @param {int} columns 
    */
   constructor({ rows, columns }) {
-    console.log(rows, columns);
-    console.log(typeof rows, typeof columns);
     this.rows = rows;
     this.columns = columns;
   }
