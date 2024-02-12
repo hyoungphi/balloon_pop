@@ -1,4 +1,4 @@
-import Baloons from './Balloons';
+import Balloons from './Balloons';
 
 test('constructor', () => {
   const dimensions = [10, 10];
@@ -14,11 +14,11 @@ test('constructor', () => {
     [8, new Map([[0, 1], [1, 1]])],
     [9, new Map([[0, 1], [1, 1]])],
   ]);
-  const baloons = new Baloons({
+  const baloons = new Balloons({
     locations: locations,
     dimensions: dimensions
   });
-  expect(baloons).toBeInstanceOf(Baloons);
+  expect(baloons).toBeInstanceOf(Balloons);
 }
 );
 
@@ -36,13 +36,13 @@ test('doPop', () => {
     [8, new Map([[0, 1], [1, 1]])],
     [9, new Map([[0, 1], [1, 1]])],
   ]);
-  const baloons = new Baloons({
+  const baloons = new Balloons({
     locations: locations,
     dimensions: dimensions
   });
 
   expect(baloons.doPop(0, 0)).toBe(null);
-  expect(baloons.doPop(1, 4)).toBeInstanceOf(Baloons);
+  expect(baloons.doPop(1, 4)).toBeInstanceOf(Balloons);
 }
 );
 
@@ -60,18 +60,18 @@ test('Base64', () => {
     [8, new Map([[0, 1], [1, 1]])],
     [9, new Map([[0, 1], [1, 1]])],
   ]);
-  const balloons = new Baloons({
+  const balloons = new Balloons({
     locations: locations,
     dimensions: dimensions
   });
 
   const base64 = balloons.toBase64();
-  const newBalloons = Baloons.fromBase64(base64);
-  const wrongBalloons1 = Baloons.fromBase64('wrong_base64');
-  const wrongBalloons2 = Baloons.fromBase64(Buffer.from('wrong_format').toString('base64'));
-  const wrongBalloons3 = Baloons.fromBase64(Buffer.from('{"1": 2, "2": 4}').toString('base64'));
+  const newBalloons = Balloons.fromBase64(base64);
+  const wrongBalloons1 = Balloons.fromBase64('wrong_base64');
+  const wrongBalloons2 = Balloons.fromBase64(Buffer.from('wrong_format').toString('base64'));
+  const wrongBalloons3 = Balloons.fromBase64(Buffer.from('{"1": 2, "2": 4}').toString('base64'));
 
-  expect(newBalloons).toBeInstanceOf(Baloons);
+  expect(newBalloons).toBeInstanceOf(Balloons);
   expect(wrongBalloons1).toBe(null);
   expect(wrongBalloons2).toBe(null);
   expect(wrongBalloons3).toBe(null);

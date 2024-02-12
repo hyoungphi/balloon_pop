@@ -1,4 +1,4 @@
-class Baloons {
+class Balloons {
   /**
    * @param {Map<int, Map<int, int>>} locations
    * @param {Array<int>} dimensions
@@ -71,7 +71,7 @@ class Baloons {
    * If the pop is not maximum, returns null.
    * @param {int} x
    * @param {int} y
-   * @returns {Baloons | null}
+   * @returns {Balloons | null}
    */
   doPop(x, y) {
     console.assert(Number.isInteger(x), 'x must be an integer');
@@ -95,7 +95,7 @@ class Baloons {
     )
     );
 
-    return new Baloons({
+    return new Balloons({
       locations: newLocations,
       dimensions: this.dimensions
     });
@@ -145,7 +145,7 @@ class Baloons {
       );
       const dimensions = obj.dimensions;
 
-      return new Baloons({ locations, dimensions });
+      return new Balloons({ locations, dimensions });
     }
     catch (e) {
       return null;
@@ -153,31 +153,36 @@ class Baloons {
 
   }
 
-  isEqual(baloons) {
-    if (!(baloons instanceof Baloons)) {
+  /**
+   * Check input Balloons is same
+   * @param {Balloons} balloons 
+   * @returns 
+   */
+  isEqual(balloons) {
+    if (!(balloons instanceof Balloons)) {
       return false;
     }
-    if (this.dimensions.length !== baloons.dimensions.length) {
+    if (this.dimensions.length !== balloons.dimensions.length) {
       return false;
     }
-    if (this.dimensions[0] !== baloons.dimensions[0]) {
+    if (this.dimensions[0] !== balloons.dimensions[0]) {
       return false;
     }
-    if (this.dimensions[1] !== baloons.dimensions[1]) {
+    if (this.dimensions[1] !== balloons.dimensions[1]) {
       return false;
     }
-    if (this.locations.size !== baloons.locations.size) {
+    if (this.locations.size !== balloons.locations.size) {
       return false;
     }
     for (let [key, value] of this.locations) {
-      if (!baloons.locations.has(key)) {
+      if (!balloons.locations.has(key)) {
         return false;
       }
-      if (value.size !== baloons.locations.get(key).size) {
+      if (value.size !== balloons.locations.get(key).size) {
         return false;
       }
       for (let [k, v] of value) {
-        if (!baloons.locations.get(key).has(k)) {
+        if (!balloons.locations.get(key).has(k)) {
           return false;
         }
       }
@@ -186,4 +191,4 @@ class Baloons {
   }
 }
 
-export default Baloons;
+export default Balloons;
