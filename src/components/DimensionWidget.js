@@ -18,6 +18,7 @@ function DimensionWidget(props) {
         <input
           className='secondary-container on-secondary-container-text'
           type='number'
+          min={1}
           value={d.rows}
           onChange={(e) => {
             setD(new Dimensions({ rows: e.target.value, columns: d.columns }));
@@ -28,13 +29,11 @@ function DimensionWidget(props) {
         <input
           className='secondary-container on-secondary-container-text'
           type='number'
+          min={1}
           value={d.columns}
-
           onChange={(e) => {
             setD(new Dimensions({ rows: d.rows, columns: e.target.value }));
             onChange(new Dimensions({ rows: d.rows, columns: e.target.value }));
-
-
           }}
         />
       </div>

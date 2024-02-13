@@ -103,6 +103,7 @@ class DoubleMap {
     if (this.size !== other.size) {
       return false;
     }
+    // eslint-disable-next-line
     for (let [x, y, _] of this.entries()) {
       if (!other.has(x, y)) {
         return false;

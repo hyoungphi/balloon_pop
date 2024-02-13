@@ -243,14 +243,23 @@ class Balloons {
 
     let doubleSet = new DoubleSet();
 
-    // TODO: fix random
-    for (let i = 0; i < dimensions.rows; i++) {
-      for (let j = 0; j < dimensions.columns; j++) {
-        let r = Math.random();
-        if (r > 0.5) {
-          doubleSet.add(i, j);
+    const gernerateRandom = (rows, columns) => {
+      let ds = new DoubleSet();
+
+      // TODO: fix random
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < columns; j++) {
+          let r = Math.random();
+          if (r > 0.5) {
+            ds.add(i, j);
+          }
         }
       }
+      return ds;
+    };
+
+    while (doubleSet.size === 0) {
+      doubleSet = gernerateRandom(dimensions.rows, dimensions.columns);
     }
     return Balloons.fromDoubleSet({ doubleSet, dimensions });
   }
