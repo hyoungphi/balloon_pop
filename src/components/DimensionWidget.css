@@ -1,0 +1,11 @@
+.dimension-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+
+  .dimension-input {
+    display: flex;
+    flex-direction: row;
+  }
+}

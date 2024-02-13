@@ -8,6 +8,8 @@ import CommonButton from 'components/CommonButton';
 import Dimensions from 'models/Dimensions';
 import { useNavigate } from 'react-router-dom';
 
+import './StartPage.css';
+
 const DEFAULT_DIMENSION = new Dimensions({ rows: 5, columns: 5 });
 
 function StartPage() {
@@ -17,22 +19,36 @@ function StartPage() {
 
   return (
     <DefaultPageWrapper>
-      <h1 className='on-background-text'>Start Page</h1>
-      <DimensionWidget
-        dimensions={dimensions}
-        onChange={(value) => setDimensions(value)}
-      />
-      <BalloonTable
-        balloons={new Balloons({
-          locations: new Map(),
-          dimensions: dimensions
-        })}
-      />
-      <CommonButton
-        className='primary on-primary-text'
-        onClick={() => {
-          navigate(Balloons.random(dimensions).toBase64());
-        }}>Start Game</CommonButton>
+      <div className='start-page-container'>
+
+        <div
+          className='dimension-widget-container on-background-text'
+        >
+          <DimensionWidget
+            dimensions={dimensions}
+            onChange={(value) => setDimensions(value)}
+          />
+        </div>
+        <div
+          className='balloon-table-container'
+        >
+          <BalloonTable
+            balloons={new Balloons({
+              locations: new Map(),
+              dimensions: dimensions
+            })}
+          />
+        </div>
+        <div
+          className='start-button-container'
+        >
+          <CommonButton
+            className='primary on-primary-text'
+            onClick={() => {
+              navigate(Balloons.random(dimensions).toBase64());
+            }}>Start Game</CommonButton>
+        </div>
+      </div>
     </DefaultPageWrapper>
   );
 }

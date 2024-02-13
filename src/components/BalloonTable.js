@@ -1,5 +1,5 @@
-import Balloons from "models/Balloons";
-import BalloonCell from "./BalloonCell";
+import Balloons from 'models/Balloons';
+import BalloonCell from './BalloonCell';
 
 function BalloonTable(props) {
   const { balloons, onPop } = props;

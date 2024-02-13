@@ -1,7 +1,9 @@
+import ColorSchemeSwitch from 'components/ColorSchemeSwitch';
+
 function Header() {
   return (
-    <div className='Header outline on-surface-text'>
-      <h1>Header</h1>
+    <div className='header'>
+      <ColorSchemeSwitch />
     </div>
   );
 }

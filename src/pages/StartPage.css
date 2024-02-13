@@ -1,0 +1,24 @@
+.start-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  align-items: center;
+
+  .dimension-widget-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem;
+
+  }
+
+  /* TODO: Left cut off when balloon table is too wide */
+  .balloon-table-container {
+    margin: 1rem;
+  }
+
+  .start-button-container {
+    margin: 1rem;
+  }
+}

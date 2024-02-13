@@ -5,9 +5,9 @@ function BalloonCell({
   onClick,
 }) {
   return (
-    <div className="balloon-cell primary-container">
+    <div className={'balloon-cell secondary-container ' + (value ? 'active' : '')}>
       <div
-        className="balloon-cell__value"
+        className='balloon-cell__value'
         onClick={onClick}
       >{value}</div>
     </div>

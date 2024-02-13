@@ -1,0 +1,23 @@
+.game-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  align-items: center;
+
+  .dummy-container {
+    margin: 1rem;
+  }
+
+  /* TODO: Left cut off when balloon table is too wide */
+  .balloon-table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem;
+  }
+
+  .new-game-button-container {
+    margin: 1rem;
+  }
+}
