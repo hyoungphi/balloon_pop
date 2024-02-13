@@ -1,4 +1,15 @@
 # balloon_pop
+## Overview
+This is a simple project for a React.js pratical skill test.
+## Game rule
+
+1. When you click on a balloon, adjacent balloons burst in succession.
+2. Adjacent is defined as two balloons being attached up, down, left and right.
+3. You must pop the most balloons in each attempt.
+
+
+
+---
 
 # Getting Started with Create React App
 

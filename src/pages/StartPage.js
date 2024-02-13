@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 import './StartPage.css';
 
-const DEFAULT_DIMENSION = new Dimensions({ rows: 5, columns: 5 });
+const DEFAULT_DIMENSION = new Dimensions({ rows: 6, columns: 6 });
 
 function StartPage() {
 
@@ -33,10 +33,7 @@ function StartPage() {
           className='balloon-table-container'
         >
           <BalloonTable
-            balloons={new Balloons({
-              locations: new Map(),
-              dimensions: dimensions
-            })}
+            balloons={Balloons.empty(dimensions)}
           />
         </div>
         <div
@@ -45,7 +42,8 @@ function StartPage() {
           <CommonButton
             className='primary on-primary-text'
             onClick={() => {
-              navigate(Balloons.random(dimensions).toBase64());
+              let path = Balloons.random(dimensions).toBase64();
+              navigate(path);
             }}>Start Game</CommonButton>
         </div>
       </div>

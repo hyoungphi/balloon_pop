@@ -11,10 +11,10 @@ function BalloonTable(props) {
   return (
     <table>
       <tbody>
-        {Array.from({ length: dimensions.columns }, (_, j) => (
-          <tr key={j}>
-            {Array.from({ length: dimensions.rows }, (_, i) => (
-              <td key={i}>
+        {Array.from({ length: dimensions.rows }, (_, i) => (
+          <tr key={i}>
+            {Array.from({ length: dimensions.columns }, (_, j) => (
+              <td key={j}>
                 <BalloonCell
                   value={balloons.isBalloonExists(i, j) ? '🎈' : ''}
                   onClick={() => {

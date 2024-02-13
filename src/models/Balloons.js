@@ -1,34 +1,91 @@
 import Dimensions from 'models/Dimensions.js';
+// import SingleBalloon from './SingleBalloon';
+import DoubleSet from './DoubleSet';
+import DoubleMap from './DoubleMap';
 
 class Balloons {
+  #groups;
   #locations;
   #dimensions;
   /**
-   * @param {Map<int, Map<int, int>>} locations
+   * @param {Map<DoubleSet>} groups
+   * @param {DoubleMap} locations
    * @param {Dimensions} dimensions
    */
-  constructor({ locations, dimensions }) {
-    // TODO: Check that the Map is of the correct type
-    console.assert(locations instanceof Map, 'locations must be a Map');
+  constructor({ groups, locations, dimensions }) {
+    console.assert(groups instanceof Map, 'groups must be a Map');
+    console.assert(locations instanceof DoubleMap, 'locations must be a DoubleMap');
     console.assert(dimensions instanceof Dimensions, 'dimensions must be a Dimensions');
-    this.#locations = locations;
+
     this.#dimensions = dimensions;
-    this.maxPop = this.#calculateMaxPop();
+    this.#groups = groups;
+    this.#locations = locations;
   }
 
   get dimensions() { return this.#dimensions; }
   get locations() { return this.#locations; }
 
 
-
   /**
-   * @param {int} x
-   * @param {int} y
-   * @returns {boolean}
+   * 
+   * @param {DoubleSet} ballonSet 
    */
+  static calculateGroups(ballonSet) {
+    console.assert(ballonSet instanceof DoubleSet, 'ballonSet must be a DoubleSet');
+    let groups = new Map();
+    let locations = new DoubleMap();
+    let toVisit = ballonSet;
+    let groupNumber = 0;
+
+    while (toVisit.size > 0) {
+      let balloon = toVisit.entries()[0];
+      groups.set(groupNumber, new DoubleSet([balloon]));
+      locations.set(balloon[0], balloon[1], groupNumber);
+      toVisit.delete(balloon[0], balloon[1]);
+      let neighbors = Balloons.getNeighbors(balloon[0], balloon[1], toVisit);
+      while (neighbors.length > 0) {
+        let neighbor = neighbors.pop();
+        groups.get(groupNumber).add(neighbor[0], neighbor[1]);
+        locations.set(neighbor[0], neighbor[1], groupNumber);
+        toVisit.delete(neighbor[0], neighbor[1]);
+        neighbors = neighbors.concat(Balloons.getNeighbors(neighbor[0], neighbor[1], toVisit));
+      }
+      groupNumber++;
+    }
+    let printGroups = [];
+    for (let [groupNumber, balloons] of groups.entries()) {
+      printGroups.push([groupNumber, ...balloons.entries()]);
+    }
+    return { groups, locations };
+  }
+
+
+  static getNeighbors(x, y, ballonSet) {
+    let neighbors = [];
+    if (ballonSet.has(x - 1, y)) {
+      neighbors.push([x - 1, y]);
+    }
+    if (ballonSet.has(x + 1, y)) {
+      neighbors.push([x + 1, y]);
+    }
+    if (ballonSet.has(x, y - 1)) {
+      neighbors.push([x, y - 1]);
+    }
+    if (ballonSet.has(x, y + 1)) {
+      neighbors.push([x, y + 1]);
+    }
+    return neighbors;
+  }
+
+
   #checkMaxPop(x, y) {
     let pop = this.#calculatePop(x, y);
-    if (pop < this.maxPop) {
+    let maxPop = 0;
+    // eslint-disable-next-line
+    for (let [_, ds] of this.#groups.entries()) {
+      maxPop = Math.max(maxPop, ds.size);
+    }
+    if (pop < maxPop) {
       return false;
     }
     return true;
@@ -36,41 +93,13 @@ class Balloons {
 
   #calculatePop(x, y) {
     let pop = 0;
-    if (!this.#locations.get(x) || !this.#locations.get(x).get(y)) {
-      return pop;
-    }
-
-    let xs = [x - 1, x, x + 1].filter((x) => x >= 0 && x < this.#dimensions.rows);
-    let ys = [y - 1, y, y + 1].filter((y) => y >= 0 && y < this.#dimensions.columns);
-    for (let i = 0; i < xs.length; i++) {
-      if (this.#locations.get(xs[i]) && this.#locations.get(xs[i]).get(y)) {
-        pop++;
-      }
-    }
-    for (let j = 0; j < ys.length; j++) {
-      if (this.#locations.get(x) && this.#locations.get(x).get(ys[j])) {
-        pop++;
-      }
-    }
-    if (this.#locations.get(x) && this.#locations.get(x).get(y)) pop--;
-
-    return pop;
+    if (!this.#locations.has(x, y)) return pop;
+    let groupNumber = this.#locations.get(x, y);
+    if (!this.#groups.has(groupNumber)) return pop;
+    let pops = this.#groups.get(groupNumber);
+    return pops.size;
   }
 
-  #calculateMaxPop() {
-    let maxPop = 0;
-
-    for (let [x, row] of this.#locations.entries()) {
-      // eslint-disable-next-line
-      for (let [y, _] of row.entries()) {
-        let pop = this.#calculatePop(x, y);
-        maxPop = Math.max(maxPop, pop);
-        if (maxPop === 5) return maxPop;
-      }
-    }
-
-    return maxPop;
-  }
 
   /**
    * returns new baloons after popping the baloon at the given location.
@@ -89,14 +118,23 @@ class Balloons {
 
     if (!this.#checkMaxPop(x, y)) return null;
 
-    this.#removeBalloon(x - 1, y);
-    this.#removeBalloon(x, y);
-    this.#removeBalloon(x + 1, y);
-    this.#removeBalloon(x, y - 1);
-    this.#removeBalloon(x, y + 1);
+    let groupNumber = this.#locations.get(x, y);
+    let newGroups = new Map();
+    for (let [key, ds] of this.#groups.entries()) {
+      if (key !== groupNumber) {
+        newGroups.set(key, ds);
+      }
+    }
+    let newLocations = new DoubleMap();
+    for (let [x, y, v] of this.#locations.entries()) {
+      if (v !== groupNumber) {
+        newLocations.set(x, y, v);
+      }
+    }
 
     return new Balloons({
-      locations: this.#locations,
+      groups: newGroups,
+      locations: newLocations,
       dimensions: this.#dimensions
     });
   }
@@ -108,25 +146,24 @@ class Balloons {
    * @returns {boolean}
    */
   isBalloonExists(x, y) {
-    return this.#locations.get(x) && this.#locations.get(x).get(y);
+    return this.#locations.has(x, y);
   }
 
-  #toObject() {
+  toObject() {
+    let objGroups = [];
+    for (let [groupNumber, balloons] of this.#groups.entries()) {
+      objGroups.push([groupNumber, balloons.entries()]);
+    }
     return {
-      locations: Object.fromEntries(
-        [...this.#locations].map(([key, value]) => [
-          key,
-          Object.fromEntries([...value])
-        ]
-        )
-      ),
+      groups: objGroups,
+      locations: this.#locations.toObject(),
       dimensions: this.#dimensions.toObject()
     };
 
   }
 
   toBase64() {
-    const obj = this.#toObject();
+    const obj = this.toObject();
     const json = JSON.stringify(obj);
 
     let base64;
@@ -159,15 +196,15 @@ class Balloons {
     let obj;
     try {
       obj = JSON.parse(json);
-      const locations = new Map(
-        Object.entries(obj.locations).map(([key, value]) => [
-          parseInt(key),
-          new Map(Object.entries(value).map(([key, value]) => [parseInt(key), value]))
-        ])
-      );
+      let groups = new Map();
+      for (let [groupNumber, balloons] of obj.groups) {
+        groups.set(groupNumber, DoubleSet.fromObject(balloons));
+      }
+      const locations = DoubleMap.fromObject(obj.locations);
       const dimensions = Dimensions.fromObject(obj.dimensions);
+      if (!groups || !locations || !dimensions) return null;
 
-      return new Balloons({ locations, dimensions });
+      return new Balloons({ groups, locations, dimensions });
     }
     catch (e) {
       return null;
@@ -181,44 +218,18 @@ class Balloons {
    * @returns 
    */
   isEqual(balloons) {
-    if (!(balloons instanceof Balloons)) {
+    if (!(balloons instanceof Balloons))
       return false;
-    }
-    if (this.#dimensions.rows !== balloons.dimensions.rows) {
+    if (this.#dimensions.rows !== balloons.dimensions.rows)
       return false;
-    }
-    if (this.#dimensions.columns !== balloons.dimensions.columns) {
+    if (this.#dimensions.columns !== balloons.dimensions.columns)
       return false;
-    }
-    if (this.#locations.size !== balloons.locations.size) {
+    if (this.#locations.size !== balloons.locations.size)
       return false;
-    }
-    for (let [key, value] of this.#locations) {
-      if (!balloons.locations.has(key)) {
-        return false;
-      }
-      if (value.size !== balloons.locations.get(key).size) {
-        return false;
-      }
-      // eslint-disable-next-line
-      for (let [k, _] of value) {
-        if (!balloons.locations.get(key).has(k)) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
+    if (!this.#locations.isEqual(balloons.locations))
+      return false;
 
-  addBalloon(x, y) {
-    if (this.#locations.has(x)) {
-      if (this.#locations.get(x).has(y)) return false;
-      this.#locations.get(x).set(y, 1);
-      return true;
-    } else {
-      this.#locations.set(x, new Map([[y, 1]]));
-      return true;
-    }
+    return true;
   }
 
   #removeBalloon(x, y) {
@@ -234,6 +245,7 @@ class Balloons {
     return false;
   }
 
+
   /**
    * 
    * @param {Dimensions} dimensions 
@@ -241,19 +253,33 @@ class Balloons {
   static random(dimensions) {
     console.assert(dimensions instanceof Dimensions, 'dimensions must be Dimensions');
 
-    let balloon = new Balloons({ locations: new Map(), dimensions });
+    let doubleSet = new DoubleSet();
 
-    // to fix random
+    // TODO: fix random
     for (let i = 0; i < dimensions.rows; i++) {
       for (let j = 0; j < dimensions.columns; j++) {
         let r = Math.random();
         if (r > 0.5) {
-          balloon.addBalloon(i, j);
+          doubleSet.add(i, j);
         }
       }
     }
-    return balloon;
+    return Balloons.fromDoubleSet({ doubleSet, dimensions });
   }
+
+  static empty(dimensions) {
+    console.assert(dimensions instanceof Dimensions, 'dimensions must be Dimensions');
+    return new Balloons({ groups: new Map(), locations: new DoubleMap(), dimensions });
+  }
+
+  static fromDoubleSet({ doubleSet, dimensions }) {
+    console.assert(doubleSet instanceof DoubleSet, 'doubleSet must be a DoubleSet');
+    console.assert(dimensions instanceof Dimensions, 'dimensions must be a Dimensions');
+
+    const { groups, locations } = Balloons.calculateGroups(doubleSet);
+    return new Balloons({ groups, locations, dimensions });
+  }
+
 
   isCleared() {
     return this.#locations.size === 0;

@@ -1,22 +1,21 @@
 import Balloons from './Balloons';
 import Dimensions from 'models/Dimensions';
+import SingleBalloon from './SingleBalloon';
+import DoubleSet from './DoubleSet';
 
 test('constructor', () => {
-  const dimensions = new Dimensions({ rows: 10, columns: 10 });
-  const locations = new Map([
-    [0, new Map([[0, 1], [1, 1], [4, 1], [9, 1]])],
-    [1, new Map([[0, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1]])],
-    [2, new Map([[0, 1], [1, 1], [4, 1], [9, 1]])],
-    [3, new Map([[0, 1], [1, 1]])],
-    [4, new Map([[0, 1], [1, 1]])],
-    [5, new Map([[0, 1], [1, 1]])],
-    [6, new Map([[0, 1], [1, 1]])],
-    [7, new Map([[0, 1], [1, 1]])],
-    [8, new Map([[0, 1], [1, 1]])],
-    [9, new Map([[0, 1], [1, 1]])],
+  const dimensions = new Dimensions({ rows: 6, columns: 6 });
+
+  const doubleSet = new DoubleSet([
+    [0, 0], [0, 1], [0, 5],
+    [1, 2], [1, 4], [1, 5],
+    [2, 1], [2, 2],
+    [3, 1], [3, 3], [3, 4],
+    [4, 2],
+    [5, 2], [5, 5]
   ]);
-  const baloons = new Balloons({
-    locations: locations,
+  const baloons = Balloons.fromDoubleSet({
+    doubleSet: doubleSet,
     dimensions: dimensions
   });
   expect(baloons).toBeInstanceOf(Balloons);
@@ -24,61 +23,78 @@ test('constructor', () => {
 );
 
 test('doPop', () => {
-  const dimensions = new Dimensions({ rows: 10, columns: 10 });
-  const locations = new Map([
-    [0, new Map([[0, 1], [1, 1], [4, 1], [9, 1]])],
-    [1, new Map([[0, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1]])],
-    [2, new Map([[0, 1], [1, 1], [4, 1], [9, 1]])],
-    [3, new Map([[0, 1], [1, 1]])],
-    [4, new Map([[0, 1], [1, 1]])],
-    [5, new Map([[0, 1], [1, 1]])],
-    [6, new Map([[0, 1], [1, 1]])],
-    [7, new Map([[0, 1], [1, 1]])],
-    [8, new Map([[0, 1], [1, 1]])],
-    [9, new Map([[0, 1], [1, 1]])],
+  const dimensions = new Dimensions({ rows: 6, columns: 6 });
+
+
+  const doubleSet = new DoubleSet([
+    [0, 0], [0, 1], [0, 5],
+    [1, 2], [1, 4], [1, 5],
+    [2, 1], [2, 2],
+    [3, 1], [3, 3], [3, 4],
+    [4, 2],
+    [5, 2], [5, 5]
   ]);
-  const balloons = new Balloons({
-    locations: locations,
+
+  const balloons = Balloons.fromDoubleSet({
+    doubleSet: doubleSet,
     dimensions: dimensions
   });
 
   expect(balloons.doPop(0, 0)).toBe(null);
-  const popedBallons = balloons.doPop(1, 4);
-  const expectPopedLocations = new Map([
-    [0, new Map([[0, 1], [1, 1], [9, 1]])],
-    [1, new Map([[0, 1], [2, 1], [6, 1], [7, 1], [8, 1], [9, 1]])],
-    [2, new Map([[0, 1], [1, 1], [9, 1]])],
-    [3, new Map([[0, 1], [1, 1]])],
-    [4, new Map([[0, 1], [1, 1]])],
-    [5, new Map([[0, 1], [1, 1]])],
-    [6, new Map([[0, 1], [1, 1]])],
-    [7, new Map([[0, 1], [1, 1]])],
-    [8, new Map([[0, 1], [1, 1]])],
-    [9, new Map([[0, 1], [1, 1]])],
+  const popedBallons = balloons.doPop(1, 2);
+  const expectPopedSet = new DoubleSet([
+    [0, 0], [0, 1], [0, 5],
+    [1, 2], [1, 4], [1, 5],
+    [2, 1], [2, 2],
+    [3, 1], [3, 3], [3, 4],
+    [4, 2],
+    [5, 2], [5, 5]
   ]);
-  const expextPopedBalloons = new Balloons({ locations: expectPopedLocations, dimensions: dimensions });
+
+  const expextPopedBalloons = Balloons.fromDoubleSet({ doubleSet: expectPopedSet, dimensions: dimensions });
   expect(popedBallons).toBeInstanceOf(Balloons);
   expect(popedBallons.isEqual(expextPopedBalloons)).toBe(true);
 
+  const doubleSet2 = new DoubleSet([
+    [1, 4],
+    [2, 1],
+    [3, 1],
+    [3, 3],
+    [4, 2],
+    [5, 1],
+  ]);
+  const balloons2 = Balloons.fromDoubleSet({
+    doubleSet: doubleSet2,
+    dimensions: dimensions
+  });
+
+  const popedBallons2 = balloons2.doPop(5, 1);
+  const expectPopedSet2 = new DoubleSet([
+    [1, 4],
+    [2, 1],
+    [3, 1],
+    [3, 3],
+    [4, 2],
+  ]);
+  const expextPopedBalloons2 = Balloons.fromDoubleSet({ doubleSet: expectPopedSet2, dimensions: dimensions });
+  expect(popedBallons2).toBeInstanceOf(Balloons);
+  expect(popedBallons2.isEqual(expextPopedBalloons2)).toBe(true);
 }
 );
 
 test('Base64', () => {
-  const dimensions = new Dimensions({ rows: 10, columns: 10 });
-  const locations = new Map([
-    [0, new Map([[0, 1], [1, 1], [4, 1], [9, 1]])],
-    [1, new Map([[0, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1]])],
-    [2, new Map([[0, 1], [1, 1], [4, 1], [9, 1]])],
-    [3, new Map([[0, 1], [1, 1]])],
-    [4, new Map([[0, 1], [1, 1]])],
-    [5, new Map([[0, 1], [1, 1]])],
-    [6, new Map([[0, 1], [1, 1]])],
-    [7, new Map([[0, 1], [1, 1]])],
-    [8, new Map([[0, 1], [1, 1]])],
-    [9, new Map([[0, 1], [1, 1]])],
+  const dimensions = new Dimensions({ rows: 6, columns: 6 });
+
+  const doubleSet = new DoubleSet([
+    [0, 0], [0, 1], [0, 5],
+    [1, 2], [1, 4], [1, 5],
+    [2, 1], [2, 2],
+    [3, 1], [3, 3], [3, 4],
+    [4, 2],
+    [5, 2], [5, 5]
   ]);
-  const balloons = new Balloons({
-    locations: locations,
+  const balloons = Balloons.fromDoubleSet({
+    doubleSet: doubleSet,
     dimensions: dimensions
   });
 
