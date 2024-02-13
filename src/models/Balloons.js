@@ -226,24 +226,12 @@ class Balloons {
       return false;
     if (this.#locations.size !== balloons.locations.size)
       return false;
-    if (!this.#locations.isEqual(balloons.locations))
+    if (!this.#locations.isEqualWOValue(balloons.locations))
       return false;
 
     return true;
   }
 
-  #removeBalloon(x, y) {
-    if (this.#locations.has(x)) {
-      if (this.#locations.get(x).has(y)) {
-        this.#locations.get(x).delete(y);
-        if (this.#locations.get(x).size === 0) {
-          this.#locations.delete(x);
-        }
-        return true;
-      }
-    }
-    return false;
-  }
 
 
   /**

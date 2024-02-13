@@ -44,9 +44,8 @@ test('doPop', () => {
   const popedBallons = balloons.doPop(1, 2);
   const expectPopedSet = new DoubleSet([
     [0, 0], [0, 1], [0, 5],
-    [1, 2], [1, 4], [1, 5],
-    [2, 1], [2, 2],
-    [3, 1], [3, 3], [3, 4],
+    [1, 4], [1, 5],
+    [3, 3], [3, 4],
     [4, 2],
     [5, 2], [5, 5]
   ]);
@@ -54,6 +53,7 @@ test('doPop', () => {
   const expextPopedBalloons = Balloons.fromDoubleSet({ doubleSet: expectPopedSet, dimensions: dimensions });
   expect(popedBallons).toBeInstanceOf(Balloons);
   expect(popedBallons.isEqual(expextPopedBalloons)).toBe(true);
+  expect(balloons.doPop(5, 5)).toBe(null);
 
   const doubleSet2 = new DoubleSet([
     [1, 4],
@@ -68,17 +68,19 @@ test('doPop', () => {
     dimensions: dimensions
   });
 
-  const popedBallons2 = balloons2.doPop(5, 1);
+  const popedBallons2 = balloons2.doPop(2, 1);
   const expectPopedSet2 = new DoubleSet([
     [1, 4],
-    [2, 1],
-    [3, 1],
+    // [2, 1],
+    // [3, 1],
     [3, 3],
     [4, 2],
+    [5, 1]
   ]);
   const expextPopedBalloons2 = Balloons.fromDoubleSet({ doubleSet: expectPopedSet2, dimensions: dimensions });
   expect(popedBallons2).toBeInstanceOf(Balloons);
   expect(popedBallons2.isEqual(expextPopedBalloons2)).toBe(true);
+  expect(balloons2.doPop(1, 4)).toBe(null);
 }
 );
 
