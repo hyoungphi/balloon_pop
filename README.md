@@ -21,6 +21,8 @@ In the project directory, you can run:
 
 ### `npm start`
 
+**Note**: The development server is currently not functional due to a compatibility issue between react-scripts 5.0.1 and webpack-dev-server 5.x. This was a necessary trade-off to fix security vulnerabilities. For development work, please use `npm run build` and serve the build folder.
+
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
